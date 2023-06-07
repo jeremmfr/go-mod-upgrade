@@ -199,6 +199,7 @@ func discover() ([]Module, error) {
 
 	args := []string{
 		"list",
+		"-e",
 		"-u",
 		"-mod=readonly",
 		"-f",
