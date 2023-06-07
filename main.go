@@ -95,6 +95,7 @@ func formatTo(module Module) string {
 	if to.Metadata() != "" {
 		fmt.Fprintf(&buf, "%s%s", green("+"), green(to.Metadata()))
 	}
+
 	return buf.String()
 }
 
@@ -117,6 +118,7 @@ func (m MultiSelect) Cleanup(config *survey.PromptConfig, val interface{}) error
 type appEnv struct {
 	verbose  bool
 	force    bool
+	tidy     bool
 	pageSize int
 	hook     string
 }
@@ -174,11 +176,20 @@ func (app *appEnv) run() error {
 		if app.force {
 			log.Debug("Update all modules in non-interactive mode...")
 			update(modules, app.hook)
+
+			if app.tidy {
+				tidy()
+			}
+
 			return nil
 		}
 		if len(modules) > 0 {
 			modules = choose(modules, app.pageSize)
 			update(modules, app.hook)
+
+			if app.tidy {
+				tidy()
+			}
 		} else {
 			fmt.Println("All modules are up to date")
 		}
@@ -186,6 +197,7 @@ func (app *appEnv) run() error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -292,7 +304,19 @@ func choose(modules []Module, pageSize int) []Module {
 	for _, x := range choice {
 		updates = append(updates, modules[x])
 	}
+
 	return updates
+}
+
+func tidy() {
+	fmt.Fprintf(color.Output, "Executing %s...\n", color.New(color.FgRed).SprintFunc()("go mod tidy"))
+	out, err := exec.Command("go", "mod", "tidy").CombinedOutput()
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error": err,
+			"out":   string(out),
+		}).Error("Error while executing mod tidy")
+	}
 }
 
 func update(modules []Module, hook string) {
@@ -373,6 +397,13 @@ func main() {
 				Value:       false,
 				Usage:       "Force update all modules in non-interactive mode",
 				Destination: &app.force,
+			},
+			&cli.BoolFlag{
+				Name:        "tidy",
+				Aliases:     []string{"t"},
+				Value:       false,
+				Usage:       "Run go mod tidy after update",
+				Destination: &app.tidy,
 			},
 			&cli.BoolFlag{
 				Name:        "verbose",
