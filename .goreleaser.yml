@@ -4,17 +4,23 @@ before:
 builds:
 - env:
   - CGO_ENABLED=0
+  flags:
+    - -trimpath
   goos:
-  - darwin
-  - linux
-  - windows
+    - darwin
+    - linux
+    - windows
+  goarch:
+    - amd64
+    - '386'
+    - arm
+    - arm64
+  ignore:
+    - goos: darwin
+      goarch: '386'
 archives:
-- replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+  - format: zip
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -25,3 +31,5 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+release:
+  draft: true
