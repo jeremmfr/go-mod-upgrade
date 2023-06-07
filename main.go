@@ -183,17 +183,18 @@ func (app *appEnv) run() error {
 		if err != nil {
 			return err
 		}
-		if app.force {
-			log.Debug("Update all modules in non-interactive mode...")
-			update(modules, app.hook)
+		if len(modules) > 0 {
+			if app.force {
+				log.Debug("Update all modules in non-interactive mode...")
+				update(modules, app.hook)
 
-			if app.tidy {
-				tidy()
+				if app.tidy {
+					tidy()
+				}
+
+				return nil
 			}
 
-			return nil
-		}
-		if len(modules) > 0 {
 			modules = choose(modules, app.pageSize)
 			update(modules, app.hook)
 
