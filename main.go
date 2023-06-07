@@ -35,6 +35,7 @@ func max(x, y int) int {
 	if x > y {
 		return x
 	}
+
 	return y
 }
 
@@ -42,6 +43,7 @@ func padRight(str string, length int) string {
 	if len(str) >= length {
 		return str
 	}
+
 	return str + strings.Repeat(" ", length-len(str))
 }
 
@@ -49,20 +51,23 @@ func formatName(module Module, length int) string {
 	c := color.New(color.FgWhite).SprintFunc()
 	from := module.from
 	to := module.to
-	if from.Minor() != to.Minor() {
+	switch {
+	case from.Prerelease() != to.Prerelease():
+		c = color.New(color.FgRed).SprintFunc()
+	case from.Major() != to.Major():
+		c = color.New(color.FgRed).SprintFunc()
+	case from.Minor() != to.Minor():
 		c = color.New(color.FgYellow).SprintFunc()
-	}
-	if from.Patch() != to.Patch() {
+	case from.Patch() != to.Patch():
 		c = color.New(color.FgGreen).SprintFunc()
 	}
-	if from.Prerelease() != to.Prerelease() {
-		c = color.New(color.FgRed).SprintFunc()
-	}
+
 	return c(padRight(module.name, length))
 }
 
 func formatFrom(from *semver.Version, length int) string {
 	c := color.New(color.FgBlue).SprintFunc()
+
 	return c(padRight(from.String(), length))
 }
 
@@ -72,8 +77,13 @@ func formatTo(module Module) string {
 	from := module.from
 	to := module.to
 	same := true
-	fmt.Fprintf(&buf, "%d.", to.Major())
-	if from.Minor() == to.Minor() {
+	if from.Major() == to.Major() {
+		fmt.Fprintf(&buf, "%d.", to.Major())
+	} else {
+		fmt.Fprintf(&buf, "%s%s", green(to.Major()), green("."))
+		same = false
+	}
+	if from.Minor() == to.Minor() && same {
 		fmt.Fprintf(&buf, "%d.", to.Minor())
 	} else {
 		fmt.Fprintf(&buf, "%s%s", green(to.Minor()), green("."))
@@ -95,6 +105,7 @@ func formatTo(module Module) string {
 	if to.Metadata() != "" {
 		fmt.Fprintf(&buf, "%s%s", green("+"), green(to.Metadata()))
 	}
+
 	return buf.String()
 }
 
@@ -117,6 +128,7 @@ func (m MultiSelect) Cleanup(config *survey.PromptConfig, val interface{}) error
 type appEnv struct {
 	verbose  bool
 	force    bool
+	tidy     bool
 	pageSize int
 	hook     string
 }
@@ -174,11 +186,20 @@ func (app *appEnv) run() error {
 		if app.force {
 			log.Debug("Update all modules in non-interactive mode...")
 			update(modules, app.hook)
+
+			if app.tidy {
+				tidy()
+			}
+
 			return nil
 		}
 		if len(modules) > 0 {
 			modules = choose(modules, app.pageSize)
 			update(modules, app.hook)
+
+			if app.tidy {
+				tidy()
+			}
 		} else {
 			fmt.Println("All modules are up to date")
 		}
@@ -186,6 +207,7 @@ func (app *appEnv) run() error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -199,6 +221,7 @@ func discover() ([]Module, error) {
 
 	args := []string{
 		"list",
+		"-e",
 		"-u",
 		"-mod=readonly",
 		"-f",
@@ -291,7 +314,19 @@ func choose(modules []Module, pageSize int) []Module {
 	for _, x := range choice {
 		updates = append(updates, modules[x])
 	}
+
 	return updates
+}
+
+func tidy() {
+	fmt.Fprintf(color.Output, "Executing %s...\n", color.New(color.FgRed).SprintFunc()("go mod tidy"))
+	out, err := exec.Command("go", "mod", "tidy").CombinedOutput()
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error": err,
+			"out":   string(out),
+		}).Error("Error while executing mod tidy")
+	}
 }
 
 func update(modules []Module, hook string) {
@@ -372,6 +407,13 @@ func main() {
 				Value:       false,
 				Usage:       "Force update all modules in non-interactive mode",
 				Destination: &app.force,
+			},
+			&cli.BoolFlag{
+				Name:        "tidy",
+				Aliases:     []string{"t"},
+				Value:       false,
+				Usage:       "Run go mod tidy after update",
+				Destination: &app.tidy,
 			},
 			&cli.BoolFlag{
 				Name:        "verbose",
