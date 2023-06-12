@@ -8,7 +8,7 @@ require (
 	github.com/apex/log v1.9.0
 	github.com/briandowns/spinner v1.23.0
 	github.com/fatih/color v1.15.0
-	github.com/urfave/cli/v2 v2.25.5
+	github.com/urfave/cli/v2 v2.25.6
 	golang.org/x/mod v0.10.0
 )
 
