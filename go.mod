@@ -3,13 +3,13 @@ module github.com/jeremmfr/go-mod-upgrade
 go 1.20
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.6
+	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/apex/log v1.9.0
 	github.com/briandowns/spinner v1.23.0
 	github.com/fatih/color v1.15.0
-	github.com/urfave/cli/v2 v2.25.5
-	golang.org/x/mod v0.10.0
+	github.com/urfave/cli/v2 v2.25.7
+	golang.org/x/mod v0.12.0
 )
 
 require (
@@ -23,5 +23,5 @@ require (
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/term v0.1.0 // indirect
-	golang.org/x/text v0.3.3 // indirect
+	golang.org/x/text v0.4.0 // indirect
 )
