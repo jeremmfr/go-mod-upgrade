@@ -42,6 +42,35 @@ go-mod-upgrade
 
 Colors in module names help identify the update type:
 
-* green for a minor update
-* yellow for a patch update
-* red for major or prerelease update
+* green for a patch update
+* yellow for a minor update
+* red for :
+  * major update
+  * minor update with major `v0`
+  * prerelease update
+
+## Help
+
+```bash
+$ go-mod-upgrade --help
+NAME:
+   go-mod-upgrade - Update outdated Go dependencies interactively
+
+USAGE:
+   go-mod-upgrade [global options] command [command options] [arguments...]
+
+VERSION:
+   ...
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --pagesize value, -p value  Specify page size (default: 10)
+   --force, -f                 Force update all modules in non-interactive mode (default: false)
+   --tidy, -t                  Run go mod tidy after update (default: false)
+   --verbose, -v               Verbose mode (default: false)
+   --hook value                Hook to execute for each updated module
+   --help, -h                  show help
+   --version                   print the version (default: false)
+```
