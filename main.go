@@ -57,7 +57,12 @@ func formatName(module Module, length int) string {
 	case from.Major() != to.Major():
 		c = color.New(color.FgRed).SprintFunc()
 	case from.Minor() != to.Minor():
-		c = color.New(color.FgYellow).SprintFunc()
+		switch {
+		case from.Major() == 0:
+			c = color.New(color.FgRed).SprintFunc()
+		default:
+			c = color.New(color.FgYellow).SprintFunc()
+		}
 	case from.Patch() != to.Patch():
 		c = color.New(color.FgGreen).SprintFunc()
 	}

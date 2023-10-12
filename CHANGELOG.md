@@ -1,6 +1,10 @@
 <!-- markdownlint-disable-file MD013 MD041 -->
 # changelog
 
+ENHANCEMENTS:
+
+* change color for package name to red when update minor version but with major version `v0`
+
 ## v0.1.4 (June 08, 2023)
 
 PATCH:
