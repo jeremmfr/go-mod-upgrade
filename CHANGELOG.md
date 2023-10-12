@@ -4,6 +4,7 @@
 ENHANCEMENTS:
 
 * change color for package name to red when update minor version but with major version `v0`
+* release now with Go v1.21
 
 PATCH:
 
