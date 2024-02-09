@@ -1,7 +1,7 @@
 <!-- markdownlint-disable-file MD013 MD041 -->
 # changelog
 
-## v0.2.0 (October 12, 2023)
+## v0.2.0 (2023-10-12)
 
 ENHANCEMENTS:
 
@@ -12,31 +12,31 @@ PATCH:
 
 * update golang dependencies
 
-## v0.1.4 (June 08, 2023)
+## v0.1.4 (2023-06-08)
 
 PATCH:
 
 * update golang dependencies
 
-## v0.1.3 (June 08, 2023)
+## v0.1.3 (2023-06-08)
 
 BUG FIXES:
 
 * rollback changes in v0.1.1 (no fix needed)
 
-## v0.1.2 (June 07, 2023)
+## v0.1.2 (2023-06-07)
 
 BUG FIXES:
 
 * fix message when force update but all modules are up to date
 
-## v0.1.1 (June 07, 2023)
+## v0.1.1 (2023-06-07)
 
 BUG FIXES:
 
 * fix missing version when release
 
-## v0.1.0 (June 07, 2023)
+## v0.1.0 (2023-06-07)
 
 > First release since create fork
 
