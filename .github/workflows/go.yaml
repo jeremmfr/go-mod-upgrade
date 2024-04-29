@@ -32,9 +32,9 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
-      - uses: golangci/golangci-lint-action@v4
+      - uses: golangci/golangci-lint-action@v5
         with:
-          version: v1.56
+          version: v1.57
   goreleaser:
     name: Release
     runs-on: ubuntu-latest
