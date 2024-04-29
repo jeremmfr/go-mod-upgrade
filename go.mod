@@ -9,7 +9,7 @@ require (
 	github.com/briandowns/spinner v1.23.0
 	github.com/fatih/color v1.16.0
 	github.com/urfave/cli/v2 v2.27.1
-	golang.org/x/mod v0.16.0
+	golang.org/x/mod v0.17.0
 )
 
 require (
