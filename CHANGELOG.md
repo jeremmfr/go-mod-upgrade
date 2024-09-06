@@ -1,6 +1,10 @@
 <!-- markdownlint-disable-file MD013 MD041 -->
 # changelog
 
+ENHANCEMENTS:
+
+* release now with Go v1.23
+
 ## v0.3.0 (2024-02-09)
 
 ENHANCEMENTS:
