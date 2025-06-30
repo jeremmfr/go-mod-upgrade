@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/Masterminds/semver/v3 v3.3.1
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/apex/log v1.9.0
 	github.com/briandowns/spinner v1.23.2
 	github.com/fatih/color v1.18.0
