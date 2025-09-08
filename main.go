@@ -248,7 +248,7 @@ func discover() ([]Module, error) {
 	fmt.Printf("\r%s\r", strings.Repeat(" ", len(s.Suffix)+1))
 
 	if err != nil {
-		return nil, fmt.Errorf("Error running go command to discover modules: %w", err)
+		return nil, fmt.Errorf("error running go command to discover modules: %w", err)
 	}
 
 	split := strings.Split(string(list), "\n")
@@ -258,7 +258,7 @@ func discover() ([]Module, error) {
 		if x != "''" && x != "" {
 			matched := re.FindStringSubmatch(x)
 			if len(matched) < 4 {
-				return nil, fmt.Errorf("Couldn't parse module %s", x)
+				return nil, fmt.Errorf("couldn't parse module %s", x)
 			}
 			name, from, to := matched[1], matched[2], matched[3]
 			log.WithFields(log.Fields{
@@ -325,7 +325,7 @@ func choose(modules []Module, pageSize int) []Module {
 }
 
 func tidy() {
-	fmt.Fprintf(color.Output, "Executing %s...\n", color.New(color.FgRed).SprintFunc()("go mod tidy"))
+	_, _ = fmt.Fprintf(color.Output, "Executing %s...\n", color.New(color.FgRed).SprintFunc()("go mod tidy"))
 	out, err := exec.Command("go", "mod", "tidy").CombinedOutput()
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -337,7 +337,7 @@ func tidy() {
 
 func update(modules []Module, hook string) {
 	for _, x := range modules {
-		fmt.Fprintf(color.Output, "Updating %s to version %s...\n", formatName(x, len(x.name)), formatTo(x))
+		_, _ = fmt.Fprintf(color.Output, "Updating %s to version %s...\n", formatName(x, len(x.name)), formatTo(x))
 		out, err := exec.Command("go", "get", "-d", x.name).CombinedOutput()
 		if err != nil {
 			log.WithFields(log.Fields{
